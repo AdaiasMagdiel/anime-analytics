@@ -1,0 +1,26 @@
+{
+  "name": "adaiasmagdiel/anime-analytics",
+  "description": "A robust analytics dashboard providing anime statistics by season and year",
+  "type": "project",
+  "license": "GPL-3.0-only",
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    },
+    "files": [
+      "app/helpers.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Adaías Magdiel",
+      "email": "adaiasmagdiell@gmail.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "^7.10",
+    "adaiasmagdiel/erlenmeyer": "^5.0",
+    "adaiasmagdiel/rubik": "^6.0",
+    "adaiasmagdiel/fullcrawl": "^1.2"
+  }
+}
