@@ -1,6 +1,6 @@
 {
   "name": "adaiasmagdiel/anime-analytics",
-  "description": "A robust analytics dashboard providing anime statistics by season and year",
+  "description": "A lightweight, high-performance dashboard for visualizing anime statistics categorized by season and year.",
   "type": "project",
   "license": "GPL-3.0-only",
   "autoload": {
