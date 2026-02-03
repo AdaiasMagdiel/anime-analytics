@@ -1,13 +1,13 @@
 (ns com.adaiasmagdiel.app
   (:require [reagent.dom.client :as rdom]
-            [reagent.core :as r]
-            [com.adaiasmagdiel.app.components :as c]))
-
-
-(defonce app-state (r/atom {:data []}))
+            [com.adaiasmagdiel.app.components :as c]
+            [com.adaiasmagdiel.app.components.page-header :as page-header]))
 
 (defn main-component []
-  [c/header])
+  [:<>
+   [c/header]
+   [:main {:class "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"}
+    [page-header/root]]])
 
 (defonce root
   (rdom/create-root (.getElementById js/document "root")))
