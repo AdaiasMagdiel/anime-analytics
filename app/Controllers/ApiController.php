@@ -32,4 +32,31 @@ class ApiController
             return $res->withError(400, $e->getMessage());
         }
     }
+
+    public static function seasonAnalytics(Request $req, Response $res, stdClass $params)
+    {
+        try {
+            $year = (int) $req->getQueryParam('year', date('Y'));
+            $season = $req->getQueryParam('season');
+
+            $stats = JikanService::seasonAnalytics($season, $year);
+
+            return $res->withJson(["data" => $stats]);
+        } catch (Exception $e) {
+            return $res->withError(400, $e->getMessage());
+        }
+    }
+
+    public static function yearAnalytics(Request $req, Response $res, stdClass $params)
+    {
+        try {
+            $year = (int) ($params->year ?? date('Y'));
+
+            $stats = JikanService::yearAnalytics($year);
+
+            return $res->withJson(["data" => $stats]);
+        } catch (Exception $e) {
+            return $res->withError(400, $e->getMessage());
+        }
+    }
 }
