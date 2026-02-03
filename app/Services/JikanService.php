@@ -7,10 +7,20 @@ use App\Cache;
 use Exception;
 use GuzzleHttp\Client;
 
+/**
+ * Service responsible for interacting with the Jikan API (MyAnimeList).
+ * * Provides methods for fetching raw anime data and generating 
+ * processed analytics with a built-in caching layer.
+ */
 class JikanService
 {
+	/** @var Client|null Singleton instance of the Guzzle HTTP Client */
 	private static ?Client $client = null;
 
+	/**
+	 * Initializes or returns the Guzzle client with pre-configured headers.
+	 * * @return Client
+	 */
 	private static function getClient(): Client
 	{
 		if (self::$client === null) {
@@ -29,9 +39,11 @@ class JikanService
 
 	/**
 	 * Internal helper to process raw anime data into a rich set of analytics.
-	 * No data is left behind; we count everything from studios to demographics.
-	 * * @param array $animeList
-	 * @return array
+	 *
+	 * Extracts counts for sources, types, ratings, studios, producers, 
+	 * genres, themes, and demographics. Also calculates scoring distributions.
+	 * * @param array $animeList Raw list of anime data from the API.
+	 * @return array Processed statistics and distributions.
 	 */
 	private static function processStats(array $animeList): array
 	{
@@ -104,6 +116,9 @@ class JikanService
 
 	/**
 	 * Returns full analytics for a specific season.
+	 * * @param string|null $season Season name (winter, spring, summer, fall).
+	 * @param int|null    $year   Calendar year.
+	 * @return array Processed stats for the given season.
 	 */
 	public static function seasonAnalytics(?string $season = null, ?int $year = null): array
 	{
@@ -127,6 +142,9 @@ class JikanService
 
 	/**
 	 * Returns full analytics for the entire year.
+	 * * Includes a special 'seasonal_performance' comparison.
+	 * * @param int|null $year Calendar year.
+	 * @return array Processed stats and seasonal comparison.
 	 */
 	public static function yearAnalytics(?int $year = null): array
 	{
@@ -150,6 +168,15 @@ class JikanService
 		}, Cache::DAY * 7);
 	}
 
+	/**
+	 * Fetches raw anime data for a specific season.
+	 * * Iterates through all Jikan pagination to compile a full list.
+	 *
+	 * @param string|null $season Season name.
+	 * @param int|null    $year   Calendar year.
+	 * @throws Exception If year is outside allowed range (1922 to current+5).
+	 * @return array List of processed anime items.
+	 */
 	public static function season(?string $season = null, ?int $year = null): array
 	{
 		$currentYear = (int) date('Y');
@@ -240,6 +267,12 @@ class JikanService
 		}, Cache::DAY * 7);
 	}
 
+	/**
+	 * Compiles raw data for all four seasons of a specific year.
+	 * * @param int|null $year Calendar year.
+	 * @throws Exception If year is outside allowed range.
+	 * @return array Merged list of all anime for the year.
+	 */
 	public static function year(?int $year = null): array
 	{
 		$currentYear = (int) date('Y');
