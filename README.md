@@ -40,7 +40,7 @@ composer install
    Use FullCrawl to set up your SQLite cache table:
 
 ```bash
-php vendor/bin/fullcrawl --run
+./vendor/bin/fullcrawl --run
 
 ```
 
@@ -71,13 +71,75 @@ Returns a collection of anime for a specific season.
 
 Returns a collection of all anime for a specific year.
 
-- **URL:** `/api/yeary`
+- **URL:** `/api/year/{year}`
 - **Method:** `GET`
-- **Params:**
-  - `year`
+- **URL Params:**
+- `year` (Required, e.g., `2026`)
 
 **Example Request:**
 `GET /api/year/2026`
+
+### Get Season Analytics
+
+Returns processed statistical data for a specific season, optimized for charts (Studios, Genres, Demographics, etc.).
+
+- **URL:** `/api/season/analytics`
+- **Method:** `GET`
+- **Query Params:**
+- `year` (Optional, defaults to current year)
+- `season` (Optional: `winter`, `spring`, `summer`, `fall`)
+
+**Example Request:**
+`GET /api/season/analytics?year=2026&season=winter`
+
+### Get Year Analytics
+
+Returns processed statistical data for the entire year, including a seasonal performance comparison (average scores per season).
+
+- **URL:** `/api/year/{year}/analytics`
+- **Method:** `GET`
+- **URL Params:**
+- `year` (Required, e.g., `2026`)
+
+**Example Request:**
+`GET /api/year/2026/analytics`
+
+---
+
+### Analytics Response Schema
+
+The analytics endpoints return a consolidated object. Here is the structure you can expect:
+
+```json
+{
+  "data": {
+    "count": 142,
+    "sources": { "Manga": 64, "Original": 22, "Light Novel": 15 },
+    "types": { "TV": 80, "Movie": 12, "ONA": 50 },
+    "ratings": { "PG-13": 55, "R - 17+": 20 },
+    "studios": { "MAPPA": 12, "A-1 Pictures": 8 },
+    "producers": { "Aniplex": 15, "Kadokawa": 12 },
+    "genres": { "Action": 45, "Sci-Fi": 30 },
+    "themes": { "Isekai": 12, "Psychological": 8 },
+    "demographics": { "Shounen": 40, "Seinen": 25 },
+    "scoring": {
+      "average": 7.24,
+      "distribution": {
+        "masterpiece": 8,
+        "great": 45,
+        "average": 60,
+        "bad": 29
+      }
+    },
+    "seasonal_performance": {
+      "winter": 7.1,
+      "spring": 7.5,
+      "summer": 0,
+      "fall": 0
+    }
+  }
+}
+```
 
 ## License
 
