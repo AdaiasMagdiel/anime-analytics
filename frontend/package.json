@@ -1,0 +1,26 @@
+{
+  "name": "frontend",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev:tailwindcss": "npx @tailwindcss/cli -i ./public/css/input.css -o ./public/css/style.css --watch",
+    "dev:cljs": "npx shadow-cljs watch app",
+    "dev:php": "php -S localhost:5013 -t ..",
+    "dev": "concurrently --kill-others --names \"TW,CLJS,PHP\" --prefix-colors \"cyan,magenta,blue\" \"npm run dev:tailwindcss\" \"npm run dev:cljs\" \"npm run dev:php\"",
+    "clean": "rimraf public/js public/css/style.css",
+    "build:tailwindcss": "npx @tailwindcss/cli -i ./public/css/input.css -o ./public/css/style.css --minify",
+    "build": "npm run clean && npm run build:tailwindcss && npx shadow-cljs release app"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "concurrently": "^9.2.1",
+    "rimraf": "^6.1.2",
+    "shadow-cljs": "3.3.5",
+    "tailwindcss": "^4.1.18"
+  },
+  "dependencies": {
+    "lucide-react": "^0.563.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  }
+}
