@@ -60,11 +60,24 @@ Returns a collection of anime for a specific season.
 
 - **URL:** `/api/season`
 - **Method:** `GET`
-- **Query Params:** \* `year` (Optional, defaults to current year)
-- `season` (Optional: `winter`, `spring`, `summer`, `fall`)
+- **Query Params:**
+  - `year` (Optional, defaults to current year)
+  - `season` (Optional: `winter`, `spring`, `summer`, `fall`. Defaults to current season)
 
 **Example Request:**
 `GET /api/season?year=2024&season=winter`
+
+### Get Year Full Data
+
+Returns a collection of all anime for a specific year.
+
+- **URL:** `/api/yeary`
+- **Method:** `GET`
+- **Params:**
+  - `year`
+
+**Example Request:**
+`GET /api/year/2026`
 
 ## License
 
