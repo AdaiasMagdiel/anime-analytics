@@ -1,13 +1,13 @@
 (ns com.adaiasmagdiel.app
   (:require [reagent.dom.client :as rdom]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            [com.adaiasmagdiel.app.components :as c]))
 
 
 (defonce app-state (r/atom {:data []}))
 
 (defn main-component []
-  [:main {:class ""}
-   [:h1 "Hello, World!"]])
+  [c/header])
 
 (defonce root
   (rdom/create-root (.getElementById js/document "root")))
