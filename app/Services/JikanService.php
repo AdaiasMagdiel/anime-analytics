@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use AdaiasMagdiel\Rubik\Rubik;
 use App\Cache;
-use DateTime;
 use Exception;
 use GuzzleHttp\Client;
 
@@ -27,7 +27,7 @@ class JikanService
 		return self::$client;
 	}
 
-	public static function season(?string $season = null, ?int $year = null)
+	public static function season(?string $season = null, ?int $year = null): array
 	{
 		$currentYear = (int) date('Y');
 		$year = $year ?? $currentYear;
@@ -112,5 +112,28 @@ class JikanService
 
 			return $results;
 		}, Cache::DAY * 7);
+	}
+
+	public static function year(?int $year = null): array
+	{
+		$currentYear = (int) date('Y');
+		$year = $year ?? $currentYear;
+
+		$maxYear = $currentYear + 5;
+		if ($year < 1922 || $year > $maxYear) {
+			throw new Exception("Invalid year range: 1922 to $maxYear");
+		}
+
+		$seasons = ['winter', 'spring', 'summer', 'fall'];
+
+		// Use the season method to get the cache if exists
+		$data = [];
+		foreach ($seasons as $season) {
+			$res = self::season($season, $year);
+			array_push($data, ...$res);
+			sleep(1);
+		}
+
+		return $data;
 	}
 }

@@ -21,4 +21,15 @@ class ApiController
             return $res->withError(400, $e->getMessage());
         }
     }
+
+    public static function year(Request $req, Response $res, stdClass $params)
+    {
+        try {
+            $year = (int) ($params->year ?? date('Y'));
+
+            return $res->withJson(["data" => JikanService::year($year)]);
+        } catch (Exception $e) {
+            return $res->withError(400, $e->getMessage());
+        }
+    }
 }
