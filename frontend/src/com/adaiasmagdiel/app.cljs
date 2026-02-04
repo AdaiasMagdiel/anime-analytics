@@ -1,7 +1,8 @@
 (ns com.adaiasmagdiel.app
   (:require [reagent.dom.client :as rdom]
             [com.adaiasmagdiel.app.components :as c]
-            [com.adaiasmagdiel.app.components.page-header :as page-header]))
+            [com.adaiasmagdiel.app.components.page-header :as page-header]
+            [com.adaiasmagdiel.app.api :as api]))
 
 (defn main-component []
   [:<>
@@ -13,6 +14,7 @@
   (rdom/create-root (.getElementById js/document "root")))
 
 (defn ^:export init! []
+		(api/fetch-analytics)
   (rdom/render root [main-component]))
 
 (defn ^:dev/after-load reload! []
