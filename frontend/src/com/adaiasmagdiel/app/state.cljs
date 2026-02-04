@@ -2,6 +2,7 @@
   (:require [reagent.core :as r]))
 
 (defonce app (r/atom {:analytics {}
+                      :thinking false
                       :filters {:mode "season"
                                 :year (.getFullYear (js/Date.))
                                 :season (nth
