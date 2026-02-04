@@ -3,7 +3,10 @@
             ["lucide-react" :refer [Search]]))
 
 (defn set-mode [mode]
-  (when (not (:thinking @state/app)) (swap! state/app assoc-in [:filters :mode] mode)))
+  (when (not (:thinking @state/app)) 
+  	(if (not (some #{mode} ["year" "season"]))
+  		(throw (js/Error. "Mode must be one of 'year' or 'season'"))
+  		(swap! state/app assoc-in [:filters :mode] mode))))
 
 (defn mode-trigger []
   (let [mode (:mode (:filters @state/app))
@@ -15,7 +18,9 @@
     [:div {:class "flex bg-black rounded-xl p-2"}
      [:button {:class [common-style
                        (if (= "year" mode) selected-style unselected-style)]
-               :on-click #(set-mode "year")
+               :on-click #(do
+               												(set-mode "year")
+               												(swap! state/app assoc-in [:filters :season] ""))
                :disabled (:thinking @state/app)}
       "Yearly"]
 
@@ -32,22 +37,24 @@
         opened-style "max-w-xs"
         closed-style "max-w-0"
 
-        select-class "bg-black border border-slate-700 text-slate-200 text-sm rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500 transition-all cursor-pointer"]
+        select-class "bg-black border border-slate-700 text-slate-200 text-sm rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500 transition-all cursor-pointer capitalize"]
 
     [:div {:class "flex items-center gap-2"}
      [:div {:class common-style}
-      [:select {:class select-class}
-       [:option year]
-       [:option (- year 1)]
-       [:option (- year 2)]]]
+      [:select {:class select-class
+      										:value year
+      										:on-change #(swap! state/app assoc-in [:filters :year] (.. % -target -value))}
+       (for [y state/years]
+       	^{:key y} [:option y])]]
 
      [:div {:class [common-style
                     (if (= mode "season") opened-style closed-style)]}
-      [:select {:class select-class}
-       [:option "winter"]
-       [:option "spring"]
-       [:option "summer"]
-       [:option "fall"]]]
+      [:select {:class select-class
+      										:value season
+      									 :on-change #(swap! state/app assoc-in [:filters :season] (.. % -target -value))}
+      	[:option {:value "" :disabled true} "Season"]
+       (for [s state/seasons]
+       	^{:key s} [:option {:class "capitalize" :value s} s])]]
 
      [:button {:class "cursor-pointer bg-indigo-600 hover:bg-indigo-500 text-white p-2 rounded-lg transition-all shadow-lg shadow-indigo-500/20 active:scale-95"
                :title "Reload data"}
@@ -64,7 +71,7 @@
      [:span {:class "text-slate-200 font-medium"}
       "industry benchmarks"]]]
 
-   [:div {:class "bg-card p-1 rounded-2xl border border-slate-800 flex flex-wrap items-center gap-2 shadow-xl"}
+   [:div {:class "w-fit bg-card p-1 px-2 rounded-2xl border border-slate-800 flex flex-col md:flex-row items-center gap-2 shadow-xl"}
     [mode-trigger]
     [:div {:class "h-8 w-[1px] bg-slate-700 mx-2 hidden md:block"}]
     [filters-selector]]])

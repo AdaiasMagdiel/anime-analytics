@@ -1,10 +1,12 @@
 (ns com.adaiasmagdiel.app.state
   (:require [reagent.core :as r]))
 
+(defonce year (.getFullYear (js/Date.)))
+(defonce seasons ["winter" "spring" "summer" "fall"])
+(defonce years (range year 1921 -1))
+
 (defonce app (r/atom {:analytics {}
                       :thinking false
                       :filters {:mode "season"
-                                :year (.getFullYear (js/Date.))
-                                :season (nth
-                                         ["winter" "spring" "summer" "fall"]
-                                         (quot (.getMonth (js/Date.)) 3))}}))
+                                :year year
+                                :season ""}}))
